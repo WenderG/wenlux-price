@@ -31,7 +31,7 @@ export function calculateServicePricing(
   const productiveHours = settings.productiveHoursPerMonth
   const baseHourlyRemuneration =
     productiveHours > 0
-      ? settings.desiredMonthlyRemuneration / productiveHours
+      ? settings.monthlyRemuneration / productiveHours
       : 0
 
   const complexity = service.complexityLevel ?? 'medium'
@@ -79,8 +79,8 @@ export function calculateServicePricing(
   const directCost = laborCost + equipmentCost + allocatedFixedCosts
   const denominator =
     1 -
-    (settings.targetProfitMarginPercent + settings.taxRatePercent +
-      settings.variableCostRatePercent) / 100
+    (settings.targetProfitMargin + settings.taxRate +
+      settings.variableCostRate) / 100
 
   const suggestedPrice =
     denominator > 0 ? directCost / denominator : null
@@ -91,7 +91,7 @@ export function calculateServicePricing(
       : suggestedPrice -
         directCost -
         suggestedPrice *
-          ((settings.taxRatePercent + settings.variableCostRatePercent) / 100)
+          ((settings.taxRate + settings.variableCostRate) / 100)
 
   return {
     baseHourlyRemuneration,
@@ -109,7 +109,7 @@ export function calculateServicePricing(
 export function calculateMonthlyRevenueTarget(settings: PlanningSettings, equipment: Equipment[] = []) {
   const contributionRate =
     1 -
-    (settings.taxRatePercent + settings.variableCostRatePercent) / 100
+    (settings.taxRate + settings.variableCostRate) / 100
 
   if (contributionRate <= 0) return null
 
@@ -119,9 +119,9 @@ export function calculateMonthlyRevenueTarget(settings: PlanningSettings, equipm
   }, 0)
 
   return (
-    settings.desiredMonthlyRemuneration +
+    settings.monthlyRemuneration +
     settings.fixedMonthlyCosts +
     monthlyEquipmentDepreciation +
-    settings.targetMonthlyProfit
+    settings.monthlyProfitGoal
   ) / contributionRate
 }

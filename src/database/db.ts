@@ -75,6 +75,22 @@ export interface Transaction {
   date: string
 }
 
+export type MaintenanceType = 'preventive' | 'corrective'
+export type MaintenanceStatus = 'scheduled' | 'completed'
+
+export interface MaintenanceRecord {
+  id?: number
+  equipmentId: number
+  title: string
+  description?: string
+  type: MaintenanceType
+  status: MaintenanceStatus
+  scheduledDate: string
+  completedDate?: string
+  cost: number
+  notes?: string
+}
+
 export interface PlanningSettings {
   key: 'main'
   monthlyRemuneration: number
@@ -95,6 +111,7 @@ class WenLuxDatabase extends Dexie {
   budgets!: Table<Budget, number>
   transactions!: Table<Transaction, number>
   planningSettings!: Table<PlanningSettings, string>
+  maintenance!: Table<MaintenanceRecord, number>
 
   constructor() {
     super('WenLuxPriceDB')
@@ -154,6 +171,18 @@ class WenLuxDatabase extends Dexie {
           updatedAt: new Date().toISOString(),
         })
       }
+    })
+
+    // Versão 4: módulo de manutenção, sem alterar os registros existentes.
+    this.version(4).stores({
+      equipment: '++id, name, category',
+      expenses: '++id, description, category, type, date',
+      services: '++id, name, category',
+      budgets: '++id, client, status, date',
+      transactions: '++id, description, type, category, date',
+      planning: 'id',
+      planningSettings: '&key',
+      maintenance: '++id, equipmentId, type, status, scheduledDate, completedDate',
     })
   }
 }

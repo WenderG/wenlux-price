@@ -4,6 +4,7 @@ import EquipmentPage from './modules/equipment/EquipmentPage'
 import ServicesPage from './modules/services/ServicesPage'
 import PlanningPage from './modules/planning/PlanningPage'
 import PricingPage from './modules/pricing/PricingPage'
+import MaintenancePage from './modules/maintenance/MaintenancePage'
 import {
   LayoutDashboard, Calculator, BriefcaseBusiness, Wallet, Package,
   Wrench, ChartNoAxesCombined, Settings, Menu, Bell, Plus,
@@ -191,6 +192,8 @@ function App() {
             <PricingPage />
           ) : activePage === 'Equipamentos' ? (
             <EquipmentPage />
+          ) : activePage === 'Manutenção' ? (
+            <MaintenancePage />
           ) : activePage === 'Serviços' ? (
             <ServicesPage />
           ) : activePage === 'Metas e planejamento' ? (

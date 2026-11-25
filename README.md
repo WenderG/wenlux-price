@@ -136,3 +136,8 @@ Em desenvolvimento. O módulo de despesas, orçamento, fluxo de caixa, análise 
 Desenvolvido para a **WenLux**.
 
 GitHub: [@WenderG](https://github.com/WenderG)
+
+
+## Módulo de Manutenção (v0.3.2)
+
+Registre manutenções preventivas e corretivas por equipamento, agende datas, marque registros como concluídos, acompanhe atrasos e custos e consulte o histórico. Os registros são salvos localmente no IndexedDB (Dexie).
