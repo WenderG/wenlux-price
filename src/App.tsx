@@ -1,13 +1,17 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import BudgetsPage from './modules/budgets/BudgetsPage'
 import EquipmentPage from './modules/equipment/EquipmentPage'
 import ServicesPage from './modules/services/ServicesPage'
 import PlanningPage from './modules/planning/PlanningPage'
 import PricingPage from './modules/pricing/PricingPage'
 import MaintenancePage from './modules/maintenance/MaintenancePage'
+import ExpensesPage from './modules/expenses/ExpensesPage'
+import FinancePage from './modules/finance/FinancePage'
+import DashboardPage from './modules/dashboard/DashboardPage'
 import {
   LayoutDashboard, Calculator, BriefcaseBusiness, Wallet, Package,
-  Wrench, ChartNoAxesCombined, Settings, Menu, Bell, Plus,
+  Wrench, ChartNoAxesCombined, Settings, Menu, Bell, Plus, FileText, History,
   TrendingUp, TrendingDown, CircleDollarSign, Target,
 } from 'lucide-react'
 
@@ -19,12 +23,23 @@ const navigation = [
   { name: 'Despesas', icon: Wallet },
   { name: 'Equipamentos', icon: Package },
   { name: 'Manutenção', icon: Wrench },
+  { name: 'Orçamentos', icon: FileText },
+  { name: 'Movimentações', icon: History },
   { name: 'Análise de mercado', icon: ChartNoAxesCombined },
 ]
 
 function App() {
   const [activePage, setActivePage] = useState('Dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  useEffect(() => {
+    const handleNavigation = (event: Event) => {
+      const page = (event as CustomEvent<string>).detail
+      if (typeof page === 'string') setActivePage(page)
+    }
+    window.addEventListener('wenlux:navigate', handleNavigation)
+    return () => window.removeEventListener('wenlux:navigate', handleNavigation)
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-[#090d16] text-gray-200">
@@ -82,7 +97,7 @@ function App() {
           </button>
 
           <div className="border-t border-white/5 pt-4 text-xs text-gray-600">
-            {sidebarOpen && 'WenLux Pricer • v0.3.1'}
+            {sidebarOpen && 'WenLux Pricer • v0.3.6'}
           </div>
         </div>
       </aside>
@@ -115,85 +130,20 @@ function App() {
         </header>
 
         <section className="p-6 md:p-10">
-          {activePage === 'Dashboard' ? (
-            <>
-              <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Visão geral</h2>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Acompanhe os custos, serviços e metas da operação.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => setActivePage('Serviços')}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-violet-500"
-                >
-                  <Plus size={18} />
-                  Novo serviço
-                </button>
-              </div>
-
-              <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <MetricCard
-                  title="Receita total"
-                  value="R$ 0,00"
-                  description="Nenhuma receita registrada"
-                  icon={<TrendingUp size={20} />}
-                />
-                <MetricCard
-                  title="Custos totais"
-                  value="R$ 0,00"
-                  description="Custos registrados"
-                  icon={<TrendingDown size={20} />}
-                />
-                <MetricCard
-                  title="Resultado"
-                  value="R$ 0,00"
-                  description="Receita menos custos"
-                  icon={<CircleDollarSign size={20} />}
-                />
-                <MetricCard
-                  title="Serviços cadastrados"
-                  value="0"
-                  description="Catálogo de serviços"
-                  icon={<BriefcaseBusiness size={20} />}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-                <div className="min-h-72 rounded-2xl border border-white/5 bg-[#111827] p-6 xl:col-span-2">
-                  <h3 className="font-semibold text-white">
-                    Desempenho financeiro
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Receitas e despesas aparecerão aqui quando o módulo
-                    financeiro estiver integrado.
-                  </p>
-                  <div className="flex h-48 items-center justify-center text-sm text-gray-600">
-                    Nenhum dado disponível
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/5 bg-[#111827] p-6">
-                  <h3 className="font-semibold text-white">
-                    Atividade recente
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Seus últimos registros.
-                  </p>
-                  <div className="flex h-48 items-center justify-center text-sm text-gray-600">
-                    Nenhuma atividade registrada
-                  </div>
-                </div>
-              </div>
-            </>
+          {activePage === 'Movimentações' ? (
+            <FinancePage />
+          ) : activePage === 'Dashboard' ? (
+            <DashboardPage />
           ) : activePage === 'Precificação' ? (
             <PricingPage />
           ) : activePage === 'Equipamentos' ? (
             <EquipmentPage />
           ) : activePage === 'Manutenção' ? (
             <MaintenancePage />
+          ) : activePage === 'Despesas' ? (
+            <ExpensesPage />
+          ) : activePage === 'Orçamentos' ? (
+            <BudgetsPage />
           ) : activePage === 'Serviços' ? (
             <ServicesPage />
           ) : activePage === 'Metas e planejamento' ? (

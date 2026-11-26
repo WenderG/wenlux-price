@@ -73,6 +73,7 @@ export interface Transaction {
   type: 'income' | 'expense'
   category: string
   date: string
+  budgetId?: number
 }
 
 export type MaintenanceType = 'preventive' | 'corrective'
@@ -180,6 +181,18 @@ class WenLuxDatabase extends Dexie {
       services: '++id, name, category',
       budgets: '++id, client, status, date',
       transactions: '++id, description, type, category, date',
+      planning: 'id',
+      planningSettings: '&key',
+      maintenance: '++id, equipmentId, type, status, scheduledDate, completedDate',
+    })
+
+    // Versão 5: histórico financeiro, com vínculo opcional ao orçamento.
+    this.version(5).stores({
+      equipment: '++id, name, category',
+      expenses: '++id, description, category, type, date',
+      services: '++id, name, category',
+      budgets: '++id, client, status, date',
+      transactions: '++id, description, type, category, date, budgetId',
       planning: 'id',
       planningSettings: '&key',
       maintenance: '++id, equipmentId, type, status, scheduledDate, completedDate',

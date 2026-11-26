@@ -141,3 +141,18 @@ GitHub: [@WenderG](https://github.com/WenderG)
 ## Módulo de Manutenção (v0.3.2)
 
 Registre manutenções preventivas e corretivas por equipamento, agende datas, marque registros como concluídos, acompanhe atrasos e custos e consulte o histórico. Os registros são salvos localmente no IndexedDB (Dexie).
+
+
+## Movimentações financeiras (v0.3.6)
+
+Registre entradas e saídas efetivamente movimentadas, com data, categoria, descrição e filtro mensal. Entradas podem ser vinculadas opcionalmente a orçamentos aprovados, permitindo registrar pagamentos parciais sem converter aprovação automaticamente em receita. O saldo do período considera apenas os registros deste módulo. Evite duplicar saídas lançadas também no módulo Despesas.
+
+
+## v0.3.6 — Dashboard integrado
+
+- Dashboard conectado aos dados locais do Dexie.
+- Indicadores mensais de entradas, saídas e saldo do caixa.
+- Gráfico de fluxo de caixa dos últimos seis meses.
+- Indicadores de serviços, orçamentos aprovados/em negociação e manutenção pendente/atrasada.
+- Lista de atividades recentes e próximas manutenções.
+- Despesas cadastradas são exibidas separadamente das movimentações de caixa para evitar dupla contagem.
